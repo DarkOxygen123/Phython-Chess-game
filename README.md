@@ -1,6 +1,6 @@
 # Phython-Chess-game
 
-Python-Console game
-Only using basic python tools no Pygame
+Python-Terminal Chess game
+Only using basic python tools no Pygame or any other libraries
 
 To play all instructions will be given when the program is run
