@@ -115,7 +115,9 @@ def instructions():
 
 
 def playgame():
-    import csv
+    castle_W = [0,0,0]
+    castle_B = [0,0,0]
+    
     white_cut=[]
     global white_cutcoin
     white_cutcoin=[]
@@ -127,8 +129,8 @@ def playgame():
  
 
     board=[      [7,'bR','bN','bB','bQ','bK','bB','bN','bR'],
-                 [6,'bP','bP','bP','--','bP','bP','bP','bP'],
-                 [5,'--','--','--','bP','--','--','--','--'],
+                 [6,'bP','bP','bP','bP','bP','bP','bP','bP'],
+                 [5,'--','--','--','--','--','--','--','--'],
                  [4,'--','--','--','--','--','--','--','--'],
                  [3,'--','--','--','--','--','--','--','--'],
                  [2,'--','--','--','--','--','--','--','--'],
@@ -139,7 +141,7 @@ def playgame():
     game_position_of_black={'bP1':[0,6],
                    'bP2':[1,6],
                    'bP3':[2,6],
-                   'bP4':[3,5],
+                   'bP4':[3,6],
                    'bP5':[4,6],
                    'bP6':[5,6],
                    'bP7':[6,6],
@@ -407,6 +409,7 @@ def playgame():
                 pass
         return(pos_for_Rook)
 
+
     def King(i_coord,j_coord):
         avl_coords=[]
         a=i_coord
@@ -420,7 +423,6 @@ def playgame():
                 pass
         return(avl_coords)
 
-
     def check_King_white(i_coord,j_coord):
         a=King(i_coord,j_coord)
         pos_for_King=[]
@@ -431,11 +433,17 @@ def playgame():
                     b=list(game_position_of_black.values())
                     if i in b:
                         pos_for_King.append(i)
-                    if (w=='--'):
+                    if (w =='--'):
                         pos_for_King.append(i)
                    
                     else:
-                        break
+                        pass
+        if castle_W[1] ==0:
+            if castle_W[0]==0 and board[7][4]=='--' and board[7][3]=='--' and board[7][2]=='--':
+                pos_for_King.append([2,0])
+                
+            elif castle_W[2]==0 and board[7][6]=='--' and board[7][7]=='--':
+                pos_for_King.append([6,0])                
         return(pos_for_King)
 
     def check_King_black(i_coord,j_coord):
@@ -452,8 +460,13 @@ def playgame():
                         pos_for_King.append(i)
                    
                     else:
-                        break
-                        
+                        pass
+        if castle_B[1] ==0:
+            if castle_B[0]==0 and board[0][4]=='--' and board[0][3]=='--' and board[0][2]=='--':
+                pos_for_King.append([2,7])
+                
+            elif castle_B[2]==0 and board[0][6]=='--' and board[0][7]=='--':
+                pos_for_King.append([6,7])    
 
         return(pos_for_King)
 
@@ -531,7 +544,6 @@ def playgame():
         avl_coords=[pos_coords1,pos_coords2,pos_coords3,pos_coords4,pos_coords5,pos_coords6,pos_coords7,pos_coords8]
         return(avl_coords)
 
-
     def check_Queen_white(i_coord,j_coord):
         a=Queen(i_coord,j_coord)
         pos_for_Queen=[]
@@ -575,6 +587,7 @@ def playgame():
             else:
                 pass
         return(pos_for_Queen)
+
 
     def PawnWhite(i_coord,j_coord):
         avl_coords=[]
@@ -719,7 +732,51 @@ def playgame():
 
             going_pos=move[input_2]
             a=list(game_position_of_black.values())
-            if going_pos in a:
+            
+            #for castle
+            if coin == 'wKk' and going_pos == [6,0]:
+                line_in=(going_pos[1]-7)//-1
+                pos_linein=going_pos[0]+1
+                                         
+
+                line_in1=(r[1]-7)//-1
+                pos_linein1=r[0]+1
+                
+                bcood=board[line_in1][pos_linein1]
+                board[line_in][pos_linein]=bcood
+                board[line_in1][pos_linein1]='--'
+                a=str(coin)+str(input_1)
+                game_position_of_white[a]=going_pos
+                
+                bcood=board[7][8]
+                board[7][6]=bcood
+                board[7][8]='--'
+                game_position_of_white['wR2']=[going_pos[0]-1, going_pos[1]]
+                
+            
+            elif coin == 'wKk' and going_pos == [2,0]:
+                line_in=(going_pos[1]-7)//-1
+                pos_linein=going_pos[0]+1
+                                         
+
+                line_in1=(r[1]-7)//-1
+                pos_linein1=r[0]+1
+                
+                bcood=board[line_in1][pos_linein1]
+                board[line_in][pos_linein]=bcood
+                board[line_in1][pos_linein1]='--'
+                a=str(coin)+str(input_1)
+                game_position_of_white[a]=going_pos
+                
+                bcood=board[7][1]
+                board[7][4]=bcood
+                board[7][1]='--'
+                game_position_of_white['wR2']=[going_pos[0]+1, going_pos[1]]
+                
+                               
+                
+                 
+            elif going_pos in a:
                 
                 line_in=(going_pos[1]-7)//-1
                 pos_linein=going_pos[0]+1
@@ -782,6 +839,47 @@ def playgame():
 
             going_pos=move[input_2]
             a=list(game_position_of_white.values())
+            
+            if coin == 'bKk' and going_pos == [6,7]:
+                line_in=(going_pos[1]-7)//-1
+                pos_linein=going_pos[0]+1
+                                         
+
+                line_in1=(r[1]-7)//-1
+                pos_linein1=r[0]+1
+                
+                bcood=board[line_in1][pos_linein1]
+                board[line_in][pos_linein]=bcood
+                board[line_in1][pos_linein1]='--'
+                a=str(coin)+str(input_1)
+                game_position_of_white[a]=going_pos
+                
+                bcood=board[0][1]
+                board[0][6]=bcood
+                board[0][8]='--'
+                game_position_of_white['wR2']=[going_pos[0]-1, going_pos[1]]
+                
+            
+            elif coin == 'wKk' and going_pos == [2,7]:
+                line_in=(going_pos[1]-7)//-1
+                pos_linein=going_pos[0]+1
+                                         
+
+                line_in1=(r[1]-7)//-1
+                pos_linein1=r[0]+1
+                
+                bcood=board[line_in1][pos_linein1]
+                board[line_in][pos_linein]=bcood
+                board[line_in1][pos_linein1]='--'
+                a=str(coin)+str(input_1)
+                game_position_of_white[a]=going_pos
+                
+                bcood=board[0][1]
+                board[0][4]=bcood
+                board[0][1]='--'
+                game_position_of_white['wR2']=[going_pos[0]+1,going_pos[1]]
+                
+                
             if going_pos in a:
                 
                 
@@ -848,42 +946,25 @@ def playgame():
                               if move_white==1:
                                                         for i in  range(8):
                                                                     print(i+1, game_position_of_white.get('wP'+str(i+1)))
+                                                        
+                                                        
                                                         k=int(input("which pawn would u like to move:"))
+                                                        while k>8 or k<1:
+                                                            print("Option out of bound. Pick right move")
+                                                            k=int(input("which pawn would u like to move:"))
+                                                            
                                                         b=game_position_of_white.get("wP"+str(k))
-
-                                            
-                                                    
+                                                   
                                                         i_coorda=b[0]
                                                         i_coordb=b[1]
                                                         
                                                         move=check_PawnWhite(i_coorda,i_coordb)
-                                                        print("possible positions for pawn",move)
-                 
-                                                        '''input_1=input("what is your move:")
-                                                        if input_1=='1':'''
-                                                                           
+                                                        print("possible positions for pawn")                                                                           
                                                         c="wP"+str(k)
-                                                        a=game_position_of_white.get(c)
-                                                        a_icood=a[0]
-                                                        b_jcood=a[1]
-                                                        move=check_PawnWhite(a_icood,b_jcood)
                                                         lent=len(move)
                                                             
-                                                        logic_of_choise_white(move,lent,a,c,'')
-
-                                                                         
-                                                        '''if input_1=='2':
+                                                        logic_of_choise_white(move,lent,b,c,'')
                                                                       
-                                                               c="wP"+str(k)
-                                                               a=game_position_of_white.get(c)
-                                                               a_icood=a[0]
-                                                               b_jcood=a[1]
-                                                               move=check_PawnWhite(a_icood,b_jcood)
-                                                               lent=len(move)
-                                                               print(move)
-                                                               logic_of_choise_white(move,lent,a,c,'')'''
-
-
                               elif move_white==(2)or(3):
                                                         if move_white==3:
                                                                a=game_position_of_white.get("wQq")
@@ -897,9 +978,18 @@ def playgame():
                                                               b=game_position_of_white.get("wKk")
                                                               a_icood=b[0]
                                                               b_jcood=b[1]
+                                                              
+                                                              
+                                                              
                                                               move=check_King_white(a_icood,b_jcood)
+                                                              
                                                               lent=len(move)
                                                               logic_of_choise_white(move,lent,b,'wKk','')
+                                                              
+                                                              if castle_W[1]==0:
+                                                                castle_W[1] = 1
+                                                              else:
+                                                                  pass
 
                               if move_white==4 or 5 or 6:
                                                       if move_white==4: 
@@ -939,6 +1029,12 @@ def playgame():
                                                           input_1=input("which Rook would u like to move(1/2):")
                                                           s="wR"+str(input_1)
                                                           t=game_position_of_white.get(s)
+                                                          
+                                                          if t == [0,0] and castle_W[0]==0:
+                                                              castle_W[0] = 1
+                                                          elif t == [0,7] and castle_W[2]==0:
+                                                              castle_W[2] = 1
+                                                              
                                                           i_coord=t[0]
                                                           j_coord=t[1]
                                                           move=check_Rook_white(i_coord,j_coord)
@@ -953,16 +1049,19 @@ def playgame():
 
 
     def move_for_black():
-                              print("Which piece would you","like to move")
-                              cons={1:'Pawn',2:'King',3:'Queen',4:'Bishop',5:'Knight',6:'Rook'}
-                              print(cons)
-                              move_black= int(input("enter which piece:"))
+                            print("Which piece would you","like to move")
+                            cons={1:'Pawn',2:'King',3:'Queen',4:'Bishop',5:'Knight',6:'Rook'}
+                            print(cons)
+                            move_black= int(input("enter which piece:"))
 
 
-                              if move_black==1:
+                            if move_black==1:
                                                         for i in  range(8):
                                                                     print(i+1, game_position_of_black.get('bP'+str(i+1)))
                                                         k=int(input("which pawn would you like to move:"))
+                                                        while k>8 or k<1:
+                                                            print("Option out of bound. Pick right move")
+                                                            k=int(input("which pawn would u like to move:"))
                                                         b=game_position_of_black.get("bP"+str(k))
                                                     
                                                     
@@ -970,33 +1069,15 @@ def playgame():
                                                         i_coordb=b[1]
                                                         
                                                         move=check_PawnBlack(i_coorda,i_coordb)
-                                                        print("possible positions for pawn",move)
-                 
-                                                        '''input_1=input("what is your move:")
-                                                        if input_1=='1':'''
+                                                        print("possible positions for pawn")
                                                                           
                                                         c="bP"+str(k)
-                                                        a=game_position_of_black.get(c)
-                                                        a_icood=a[0]
-                                                        b_jcood=a[1]
-                                                        move=check_PawnBlack(a_icood,b_jcood)
                                                         lent=len(move)
-                                                        print(move)
-                                                        logic_of_choise_black(move,lent,a,c,'')
+                                        
+                                                        logic_of_choise_black(move,lent,b,c,'')
 
-                                                                          
-                                                        '''if input_1=='2':'''
-                                                                          
-                                                        '''c="bP"+str(k)
-                                                        a=game_position_of_black.get(c)
-                                                        a_icood=a[0]
-                                                        b_jcood=a[1]
-                                                        move=check_PawnBlack(a_icood,b_jcood)
-                                                        lent=len(move)
-                                                        print(move)
-                                                        logic_of_choise_black(move,lent,a,c,'')'''
-
-                              elif move_black==(2)or(3):
+                                                                
+                            elif move_black==(2)or(3):
                                                         if move_black==3:
                                                                a=game_position_of_black.get("bQq")
                                                                a_icood=a[0]
@@ -1005,15 +1086,23 @@ def playgame():
                                                                lent=len(move)
                                                                
                                                                logic_of_choise_black(move,lent,a,'bQq','')
+                                                               
                                                         if move_black==2:
                                                               b=game_position_of_black.get("bKk")
                                                               a_icood=b[0]
                                                               b_jcood=b[1]
+                                                              
+                                                              
                                                               move=check_King_black(a_icood,b_jcood)
                                                               lent=len(move)
                                                               logic_of_choise_black(move,lent,b,'bKk','')
+                                                              
+                                                              if castle_B[1]==0:
+                                                                castle_B[1] = 1
+                                                              else:
+                                                                  pass
 
-                              if move_black==4 or 5 or 6:
+                            if move_black==4 or 5 or 6:
                                                       if move_black==4: 
                                                           a=game_position_of_black.get("bB1")
                                                           b=game_position_of_black.get("bB2")
@@ -1046,20 +1135,30 @@ def playgame():
                                                           logic_of_choise_black(move,lent,t,'bN',input_1)
 
 
-                                                      if move_black==6: 
+                                                      if move_black==6:
+                                                          
                                                           a=game_position_of_black.get("bR1")
                                                           b=game_position_of_black.get("bR2")
                                                           print(a,b)
                                                           input_1=input("which Rook would u like to move(1/2):")
                                                           s="bR"+str(input_1)
+                                                                                                   
                                                           t=game_position_of_black.get(s)
+                                                                                                                                                                         
+                                                          if t == [0,7] and castle_B[0]==0:
+                                                              castle_B[0] = 1
+                                                          elif t == [7,7] and castle_B[2]==0:
+                                                              castle_B[2] = 1
+                                                          
                                                           i_coord=t[0]
                                                           j_coord=t[1]
                                                           move=check_Rook_black(i_coord,j_coord)
                                                           lent=len(move)
                                                           logic_of_choise_black(move,lent,t,'bR',input_1)
+                            
+                                
 
-                              else:
+                            else:
                                   print("please press valid key")
 
 
@@ -1070,6 +1169,7 @@ def playgame():
                  print()
                  Gameloop=True
                  player_change=0
+                                  
                  while(Gameloop):
                               for i in board:
                                     print(i)
@@ -1137,7 +1237,7 @@ def playgame():
 
 def moves_made():
     with open("cut_coins.csv", 'r') as f:
-        reader=csv.reader(f)
+        # reader=csv.reader(f)
         file=f.read()
 
         if file==(""):
@@ -1145,12 +1245,6 @@ def moves_made():
 
         else:
             print (file)
-
-
-
-   
-
-
 
 
 prgloop=True
@@ -1164,6 +1258,7 @@ while(prgloop):
     print("5. Exit")
 
     player_choise=int(input("Enter your choice:"))
+    
 
     if player_choise==1:
         playgame()
