@@ -1,4 +1,4 @@
-# Phython-Chess-game
+# Python-Chess-game
 
 Python-Terminal Chess game
 
